@@ -11,6 +11,14 @@ class Cat(object):
             print "You cannot go " + direction + " from here."
         prompt()
 
+    def look(self):
+        print getattr(self.location, 'description')
+        prompt()
+
+    def sleep(self):
+        print "You sprawl languidly and drift into a peaceful doze. After several hours you awake refreshed. You are, however, hungry."
+        prompt()
+
 class Person(object):
     location = ''
 
@@ -27,23 +35,23 @@ living.description = "Living Room\nYou are in a warm room with soft stuff under 
 living.objects = ['chair']
 
 kitchen = Room()
-kitchen.description = "This is the kitchen."
-kitchen.objects = ['table', 'dresser']
+kitchen.description = "Kitchen\nYou are in the room you associate with food. There is a raised platform where humans put their food when they eat. You are not supposed to jump on it. There is a tall thing in the corner that sometimes has stuff on. Your food bowl is in the corner. There is a doorway to the west and a flappy thing to the east."
+kitchen.objects = ['table', 'dresser', 'bowl']
 
 path = Room()
-path.description = "This is the path."
+path.description = "Path\nA dark shadowy narrow place. You like it here. South is the bank, and the kitchen is to the west."
 path.objects = ['bin']
 
 bank = Room()
-bank.description = "This is the bank."
+bank.description = "Bank\nAn overgrown area where you can creep under the shrubs. You sometimes find tasty mice here. To the west is the lawn, and to the north is the path."
 bank.objects = ['bush']
 
 lawn = Room()
-lawn.description = "This is the lawn."
+lawn.description = "Lawn\nA wide open patch of grass with nowhere to hide. The patio is north and the bank is to the east."
 lawn.objects = None
 
 patio = Room()
-patio.description = "This is the patio."
+patio.description = "Patio\nThis is an outside place, but with cold hard stuff under your paws. There's shiny stuff through which you can see the inside to the north, and sometimes get in. The lawn is to the south."
 patio.objects = ['flowerpot']
 
 living.n = None
@@ -77,9 +85,13 @@ patio.s = lawn
 patio.w = None
 
 def prompt():
-    input = raw_input("Do something:")
+    input = raw_input(">")
     if input in ['n', 'e', 's', 'w']:
         kitty.move(input)
+    if input in ['l', 'look']:
+        kitty.look()
+    if input in ['sleep', 'z', 'zz', 'zzz', 'zzzz']:
+        kitty.sleep()
 
 bob = Person()
 bob.location = living
@@ -88,5 +100,6 @@ kitty = Cat()
 kitty.location = living
     
 if __name__ == "__main__":
+    print kitty.location.description
     prompt()
 
