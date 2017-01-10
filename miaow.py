@@ -1,3 +1,10 @@
+"""You are a cat. You are hungry. A short adventure game."""
+
+# To-do list:
+# Add the capability to examine things.
+# Add a human. The human should move between rooms in the house.
+# Add the capability to jump on things.
+# Add a mechanism to get food.
 
 class Cat(object):
     location = ''
@@ -16,7 +23,10 @@ class Cat(object):
         prompt()
 
     def sleep(self):
-        print "You sprawl languidly and drift into a peaceful doze. After several hours you awake refreshed. You are, however, hungry."
+        if getattr(self.location, 'inside'):
+            print "You sprawl languidly and drift into a peaceful doze. After several hours you awake refreshed. You are, however, hungry."
+        else:
+            print "It would be rather chilly to sleep here. You'd prefer to sleep somewhere you can properly unwind."
         prompt()
 
 class Person(object):
@@ -29,30 +39,37 @@ class Room(object):
     cat = ''
     objects = ''
     people = ''
+    inside = True
 
 living = Room()
 living.description = "Living Room\nYou are in a warm room with soft stuff under your paws and comfy places to curl up. You can see a raised cat bed on legs. There are shiny barriers to the south which are sometimes open and a doorway to the east."
 living.objects = ['chair']
+living.inside = True
 
 kitchen = Room()
 kitchen.description = "Kitchen\nYou are in the room you associate with food. There is a raised platform where humans put their food when they eat. You are not supposed to jump on it. There is a tall thing in the corner that sometimes has stuff on. Your food bowl is in the corner. There is a doorway to the west and a flappy thing to the east."
 kitchen.objects = ['table', 'dresser', 'bowl']
+kitchen.inside =  True
 
 path = Room()
 path.description = "Path\nA dark shadowy narrow place. You like it here. South is the bank, and the kitchen is to the west."
 path.objects = ['bin']
+path.inside = False
 
 bank = Room()
 bank.description = "Bank\nAn overgrown area where you can creep under the shrubs. You sometimes find tasty mice here. To the west is the lawn, and to the north is the path."
 bank.objects = ['bush']
+bank.inside = False
 
 lawn = Room()
 lawn.description = "Lawn\nA wide open patch of grass with nowhere to hide. The patio is north and the bank is to the east."
 lawn.objects = None
+lawn.inside = False
 
 patio = Room()
 patio.description = "Patio\nThis is an outside place, but with cold hard stuff under your paws. There's shiny stuff through which you can see the inside to the north, and sometimes get in. The lawn is to the south."
 patio.objects = ['flowerpot']
+patio.inside = False
 
 living.n = None
 living.e = kitchen
