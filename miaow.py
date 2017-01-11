@@ -5,6 +5,7 @@
 # Add a human. The human should move between rooms in the house.
 # Add the capability to jump on things.
 # Add a mechanism to get food.
+# Add a mechanism to get in/out of patio doors.
 
 class Cat(object):
     location = ''
@@ -33,6 +34,10 @@ class Person(object):
     location = ''
 
 class Room(object):
+    def __init__(self, description, objects, inside):
+        self.description = description
+        self.objects = objects
+        self.inside = inside
     name = ''
     description = ''
     exits = ''
@@ -41,35 +46,35 @@ class Room(object):
     people = ''
     inside = True
 
-living = Room()
-living.description = "Living Room\nYou are in a warm room with soft stuff under your paws and comfy places to curl up. You can see a raised cat bed on legs. There are shiny barriers to the south which are sometimes open and a doorway to the east."
-living.objects = ['chair']
-living.inside = True
+living = Room(
+    "Living Room\nYou are in a warm room with soft stuff under your paws and comfy places to curl up. You can see a raised cat bed on legs. There are shiny barriers to the south which are sometimes open and a doorway to the east.",
+    ['chair'],
+    True)
 
-kitchen = Room()
-kitchen.description = "Kitchen\nYou are in the room you associate with food. There is a raised platform where humans put their food when they eat. You are not supposed to jump on it. There is a tall thing in the corner that sometimes has stuff on. Your food bowl is in the corner. There is a doorway to the west and a flappy thing to the east."
-kitchen.objects = ['table', 'dresser', 'bowl']
-kitchen.inside =  True
+kitchen = Room(
+    "Kitchen\nYou are in the room you associate with food. There is a raised platform where humans put their food when they eat. You are not supposed to jump on it. There is a tall thing in the corner that sometimes has stuff on. Your food bowl is in the corner. There is a doorway to the west and a flappy thing to the east.",
+    ['table', 'dresser', 'bowl'],
+    True)
 
-path = Room()
-path.description = "Path\nA dark shadowy narrow place. You like it here. South is the bank, and the kitchen is to the west."
-path.objects = ['bin']
-path.inside = False
+path = Room(
+    "Path\nA dark shadowy narrow place. You like it here. South is the bank, and the kitchen is to the west.",
+    ['bin'],
+    False)
 
-bank = Room()
-bank.description = "Bank\nAn overgrown area where you can creep under the shrubs. You sometimes find tasty mice here. To the west is the lawn, and to the north is the path."
-bank.objects = ['bush']
-bank.inside = False
+bank = Room(
+    "Bank\nAn overgrown area where you can creep under the shrubs. You sometimes find tasty mice here. To the west is the lawn, and to the north is the path.",
+    ['bush'],
+    False)
 
-lawn = Room()
-lawn.description = "Lawn\nA wide open patch of grass with nowhere to hide. The patio is north and the bank is to the east."
-lawn.objects = None
-lawn.inside = False
+lawn = Room(
+    "Lawn\nA wide open patch of grass with nowhere to hide. The patio is north and the bank is to the east.",
+    None,
+    False)
 
-patio = Room()
-patio.description = "Patio\nThis is an outside place, but with cold hard stuff under your paws. There's shiny stuff through which you can see the inside to the north, and sometimes get in. The lawn is to the south."
-patio.objects = ['flowerpot']
-patio.inside = False
+patio = Room(
+    "Patio\nThis is an outside place, but with cold hard stuff under your paws. There's shiny stuff through which you can see the inside to the north, and sometimes get in. The lawn is to the south.",
+    ['flowerpot'],
+    False)
 
 living.n = None
 living.e = kitchen
