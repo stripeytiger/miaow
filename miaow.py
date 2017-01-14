@@ -1,10 +1,8 @@
 """You are a cat. You are hungry. A short adventure game."""
 
 # To-do list:
-# Need error message for non-understandable commands
 # Add a function which adds item to room as well as room to item
 # Add a human. The human should move between rooms in the house.
-# Add the capability to jump on things.
 # Add a mechanism to get food.
 # Add a mechanism to get in/out of patio doors.
 # Add miaow method
@@ -215,14 +213,16 @@ def prompt():
     input_args = input.split()
     if input_args[0] in ['n', 'e', 's', 'w', 'd', 'u']:
         kitty.move(input)
-    if input_args[0] in ['l', 'look']:
+    elif input_args[0] in ['l', 'look']:
         kitty.look()
-    if input_args[0] in ['sleep', 'z', 'zz', 'zzz', 'zzzz']:
+    elif input_args[0] in ['sleep', 'z', 'zz', 'zzz', 'zzzz']:
         kitty.sleep()
-    if input_args[0] in ['x', 'examine']:
+    elif input_args[0] in ['x', 'examine']:
         kitty.examine(input_args[1])
-    if input_args[0] in ['jump']:
+    elif input_args[0] in ['jump']:
         kitty.jump(input_args[1])
+    else:
+        print "Sorry, I don't understand."
 
 bob = Person()
 bob.location = living
