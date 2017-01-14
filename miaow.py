@@ -2,10 +2,11 @@
 
 # To-do list:
 # Add a function which adds item to room as well as room to item
-# Add a human. The human should move between rooms in the house.
 # Add a mechanism to get food.
 # Add a mechanism to get in/out of patio doors.
 # Add miaow method
+
+import random
 
 # Cat class with methods for interacting with the game
 class Cat(object):
@@ -16,6 +17,8 @@ class Cat(object):
         if isinstance(new_loc, Room):
             self.location = new_loc
             print new_loc.description
+            if new_loc == bob.location:
+                print "There's a human here."
         elif isinstance(new_loc, str):
             print new_loc
         else:
@@ -60,6 +63,16 @@ class Cat(object):
 class Person(object):
     location = ''
 
+    def move(self):
+        if random.random() < 0.25:
+            direction = random.choice(['n', 'e', 's', 'w'])
+            new_loc = getattr(self.location, direction)
+            if isinstance(new_loc, Room):
+                if new_loc.inside:
+                    self.location = new_loc
+                    if kitty.location == new_loc:
+                        print "A human wanders in."
+                    
 class Room(object):
     name = ''
     cat = ''
@@ -223,6 +236,7 @@ def prompt():
         kitty.jump(input_args[1])
     else:
         print "Sorry, I don't understand."
+    bob.move()
 
 bob = Person()
 bob.location = living
