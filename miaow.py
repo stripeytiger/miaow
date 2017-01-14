@@ -1,7 +1,7 @@
 """You are a cat. You are hungry. A short adventure game."""
 
 # To-do list:
-# Perhaps I need to do ontop rooms as a sub-category of rooms? With inherited characteristics, plus if user tries to go N/S/E/W they say no
+# Need error message for non-understandable commands
 # Add a function which adds item to room as well as room to item
 # Add a human. The human should move between rooms in the house.
 # Add the capability to jump on things.
@@ -15,9 +15,11 @@ class Cat(object):
 
     def move(self, direction):
         new_loc = getattr(self.location, direction)
-        if new_loc is not None:
+        if isinstance(new_loc, Room):
             self.location = new_loc
             print new_loc.description
+        elif isinstance(new_loc, str):
+            print new_loc
         else:
             print "You cannot go " + direction + " from here."
 
@@ -64,6 +66,12 @@ class Room(object):
     name = ''
     cat = ''
     people = ''
+    n = None
+    e = None
+    s = None
+    w = None
+    d = None
+    u = None
     def __init__(self, description, inside):
         self.description = description
         self.inside = inside
@@ -76,6 +84,10 @@ class Thing(object):
 
 class OnThing(Room):
     people = None
+    n = "You have to get down first."
+    e = "You have to get down first."
+    s = "You have to get down first."
+    w = "You have to get down first."
     
 # Room definitions
 living = Room(
@@ -118,35 +130,23 @@ onwheelie = OnThing(
     "On the wheelie bin\nYou hunker down in the meatloaf position, and half-close your eyes, watching carefully in case the world should try something.",
     False)
 
-living.n = None
 living.e = kitchen
 living.s = patio
-living.w = None
 
-kitchen.n = None
 kitchen.e = path
-kitchen.s = None
 kitchen.w = living
 
-path.n = None
-path.e = None
 path.s = bank
 path.w = kitchen
 
 bank.n = path
-bank.e = None
-bank.s = None
 bank.w = lawn
 
 lawn.n = patio
 lawn.e = bank
-lawn.s = None
-lawn.w = None
 
 patio.n = living
-patio.e = None
 patio.s = lawn
-patio.w = None
 
 onchair.d = living
 
@@ -213,7 +213,7 @@ patio.things = [flowerpot]
 def prompt():
     input = raw_input(">")
     input_args = input.split()
-    if input_args[0] in ['n', 'e', 's', 'w']:
+    if input_args[0] in ['n', 'e', 's', 'w', 'd', 'u']:
         kitty.move(input)
     if input_args[0] in ['l', 'look']:
         kitty.look()
