@@ -1,7 +1,6 @@
 """You are a cat. You are hungry. A short adventure game."""
 
 # To-do list:
-# Add a function which adds item to room as well as room to item
 # Add a mechanism to get food.
 # Add a mechanism to get in/out of patio doors.
 # Add miaow method
@@ -63,29 +62,39 @@ class Cat(object):
 class Person(object):
     location = ''
 
+    def set_loc(self, new_loc):
+        old_loc = self.location
+        if old_loc:
+            old_loc.people.remove(self)
+        new_loc.people.append(self)
+        self.location = new_loc
+        
     def move(self):
         if random.random() < 0.25:
             direction = random.choice(['n', 'e', 's', 'w'])
             new_loc = getattr(self.location, direction)
             if isinstance(new_loc, Room):
                 if new_loc.inside:
-                    self.location = new_loc
+                    self.set_loc(new_loc)
                     if kitty.location == new_loc:
                         print "A human wanders in."
                     
 class Room(object):
-    name = ''
-    cat = ''
-    people = ''
-    n = None
-    e = None
-    s = None
-    w = None
-    d = None
-    u = None
     def __init__(self, description, inside):
         self.description = description
         self.inside = inside
+        self.n = None
+        self.e = None
+        self.s = None
+        self.w = None
+        self.d = None
+        self.u = None
+        self.things = []
+        self.people = []
+
+    def addthing(self, item):
+        item.location = self
+        self.things.append(item)
 
 class Thing(object):
     def __init__(self, synonyms, description, jump):
@@ -94,11 +103,12 @@ class Thing(object):
         self.jump = jump
 
 class OnThing(Room):
-    people = None
-    n = "You have to get down first."
-    e = "You have to get down first."
-    s = "You have to get down first."
-    w = "You have to get down first."
+    def __init__(self, description, inside):
+        super(OnThing, self).__init__(description, inside)
+        self.n = "You have to get down first."
+        self.e = "You have to get down first."
+        self.s = "You have to get down first."
+        self.w = "You have to get down first."
     
 # Room definitions
 living = Room(
@@ -205,23 +215,16 @@ flowerpot = Thing(
     jump = None)
 
 # Location information of things
-chair.location = living
-table.location = kitchen
-dresser.location = kitchen
-bowl.location = kitchen
-wheelie.location = path
-bush.location = bank
-flowerpot.location = patio
-
-living.things = [chair]
-kitchen.things = [table, dresser, bowl]
-path.things = [wheelie]
-bank.things = [bush]
-lawn.things = None
-patio.things = [flowerpot]
+living.addthing(chair)
+kitchen.addthing(table)
+kitchen.addthing(dresser)
+kitchen.addthing(bowl)
+path.addthing(wheelie)
+bank.addthing(bush)
+patio.addthing(flowerpot)
 
 # Input handling
-def prompt():
+def gamestep():
     input = raw_input(">")
     input_args = input.split()
     if input_args[0] in ['n', 'e', 's', 'w', 'd', 'u']:
@@ -239,7 +242,7 @@ def prompt():
     bob.move()
 
 bob = Person()
-bob.location = living
+bob.set_loc(living)
 
 kitty = Cat()
 kitty.location = living
@@ -247,5 +250,5 @@ kitty.location = living
 if __name__ == "__main__":
     print kitty.location.description
     while True:
-        prompt()
+        gamestep()
 
